@@ -4,11 +4,13 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.RamseteAutoBuilder;
-
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.DriveForwardCommand;
+import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.subsystems.Drive;
 
 public class RobotContainer {
@@ -57,6 +59,12 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return autoBuilder.fullAuto(PathPlanner.loadPath("Fancy", new PathConstraints(3, 3)));
+        return Commands.sequence(
+                drive.zeroPoseCommand(), 
+				new DriveForwardCommand(drive, 0.5),
+				new TurnToAngleCommand(drive, 180),
+				new DriveForwardCommand(drive, 0.5),
+				new TurnToAngleCommand(drive, 0));
+        // return autoBuilder.fullAuto(PathPlanner.loadPath("Fancy", new PathConstraints(3, 3)));
     }
 }

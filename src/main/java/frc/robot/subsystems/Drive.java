@@ -80,7 +80,9 @@ public class Drive extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(getGyroRotation(), 0, 0, new Pose2d());
         kinematics = new DifferentialDriveKinematics(trackWidth);
 
-        posePublisher = NetworkTableInstance.getDefault().getDoubleArrayTopic("/Drive/pose").getEntry(new double[] {});
+        posePublisher = NetworkTableInstance.getDefault()
+                .getDoubleArrayTopic("/Drive/pose")
+                .getEntry(new double[] {});
     }
 
     public Pose2d getPose() {
@@ -97,6 +99,10 @@ public class Drive extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose2d) {
         odometry.resetPosition(getGyroRotation(), getLeftDistance(), getRightDistance(), pose2d);
+    }
+
+    public Command zeroPoseCommand() {
+        return runOnce(() -> resetOdometry(new Pose2d()));
     }
 
     public double getLeftDistance() {
@@ -149,6 +155,7 @@ public class Drive extends SubsystemBase {
         var pose = odometry.update(getGyroRotation(), getLeftDistance(), getRightDistance());
 
         // Send the pose data for telemetry visualization
-        posePublisher.accept(new double[] {pose.getX(), pose.getY(), pose.getRotation().getRadians()});
+        posePublisher.accept(
+                new double[] {pose.getX(), pose.getY(), pose.getRotation().getRadians()});
     }
 }
