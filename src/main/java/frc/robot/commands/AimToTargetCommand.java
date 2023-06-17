@@ -4,15 +4,18 @@ import frc.robot.subsystems.Drive;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.LimelightInterface;
 
 public class AimToTargetCommand extends CommandBase{
     private Drive drive;
     private PIDController angleController;
+    private LimelightInterface limelightInterface;
 
     private double minSpeed = 0.05;
 
-    public AimToTargetCommand(Drive drive) {
+    public AimToTargetCommand(Drive drive, LimelightInterface limelightInterface) {
         this.drive = drive;
+        this.limelightInterface = limelightInterface;
 
         angleController = new PIDController(0.15, 0, 0);
 
@@ -28,7 +31,7 @@ public class AimToTargetCommand extends CommandBase{
 
     @Override
     public void execute() {
-        double output = angleController.calculate(drive.getPose().getRotation().getRadians());
+        double output = angleController.calculate(Units.degreesToRadians(limelightInterface.getTX()));
         output = Math.copySign(minSpeed, output) + output;
 
         drive.drivePercent(-output, output);
