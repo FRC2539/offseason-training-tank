@@ -6,8 +6,8 @@ import frc.robot.subsystems.Drive;
 
 public class DriveForwardCommand extends CommandBase {
     private Drive drive;
-    private PIDController leftController;
-    private PIDController rightController;
+    private static PIDController leftController = new PIDController(0.3, 0, 0);
+    private static PIDController rightController = new PIDController(0.3, 0, 0);
     private double desiredDistance;
     private double leftTarget;
     private double rightTarget;
@@ -17,9 +17,6 @@ public class DriveForwardCommand extends CommandBase {
     public DriveForwardCommand(Drive drive, double desiredDistanceMeters) {
         this.drive = drive;
         this.desiredDistance = desiredDistanceMeters;
-
-        leftController = new PIDController(0.3, 0, 0);
-        rightController = new PIDController(0.3, 0, 0);
 
         leftController.setTolerance(0.03);
         rightController.setTolerance(0.03);

@@ -85,12 +85,12 @@ public class Drive extends SubsystemBase {
                 .getEntry(new double[] {});
     }
 
-    public Pose2d getPose() {
-        return odometry.getPoseMeters();
-    }
-
     public Rotation2d getGyroRotation() {
         return gyro.getRotation2d();
+    }
+
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
     }
 
     public Rotation2d getRotation() {

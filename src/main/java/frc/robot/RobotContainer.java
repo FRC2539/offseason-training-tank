@@ -55,16 +55,18 @@ public class RobotContainer {
     private static double deadband(double value, double tolerance) {
         if (Math.abs(value) < tolerance) return 0.0;
 
-        return Math.copySign(value, (value - tolerance) / (1.0 - tolerance));
+        return Math.copySign((value - tolerance) / (1.0 - tolerance), value);
     }
 
     public Command getAutonomousCommand() {
-        return Commands.sequence(
-                drive.zeroPoseCommand(), 
-				new DriveForwardCommand(drive, 0.5),
-				new TurnToAngleCommand(drive, 180),
-				new DriveForwardCommand(drive, 0.5),
-				new TurnToAngleCommand(drive, 0));
-        // return autoBuilder.fullAuto(PathPlanner.loadPath("Fancy", new PathConstraints(3, 3)));
+        return autoBuilder.fullAuto(
+            PathPlanner.loadPath("Fancy", new PathConstraints(3, 3)));
+
+        // return Commands.sequence(
+        //         drive.zeroPoseCommand(), 
+		// 		new DriveForwardCommand(drive, 0.5),
+		// 		new TurnToAngleCommand(drive, 180),
+		// 		new DriveForwardCommand(drive, 0.5),
+		// 		new TurnToAngleCommand(drive, 0));
     }
 }

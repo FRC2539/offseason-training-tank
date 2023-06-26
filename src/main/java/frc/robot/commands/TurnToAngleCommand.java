@@ -7,7 +7,7 @@ import frc.robot.subsystems.Drive;
 
 public class TurnToAngleCommand extends CommandBase {
     private Drive drive;
-    private PIDController angleController;
+    private static PIDController angleController = new PIDController(0.15, 0, 0);
     private double desiredAngle;
 
     private double minSpeed = 0.05;
@@ -15,8 +15,6 @@ public class TurnToAngleCommand extends CommandBase {
     public TurnToAngleCommand(Drive drive, double desiredAngleDegrees) {
         this.drive = drive;
         this.desiredAngle = Units.degreesToRadians(desiredAngleDegrees);
-
-        angleController = new PIDController(0.15, 0, 0);
 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
         angleController.setTolerance(Units.degreesToRadians(0.1));
