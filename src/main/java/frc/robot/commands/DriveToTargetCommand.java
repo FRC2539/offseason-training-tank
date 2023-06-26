@@ -2,46 +2,47 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.LimelightInterface;
 
-public class AimToTargetCommand extends CommandBase {
+
+public class DriveToTargetCommand extends CommandBase {
+    private double targetLimelightTY;
     private Drive drive;
-    private PIDController angleController;
+    private PIDController driveController;
     private LimelightInterface limelightInterface;
 
     private double minSpeed = 0.05;
 
-    public AimToTargetCommand(Drive drive, LimelightInterface limelightInterface) {
+    public DriveToTargetCommand(double targetLimelightTY, Drive drive, LimelightInterface limelightInterface) {
+        this.targetLimelightTY = targetLimelightTY;
         this.drive = drive;
         this.limelightInterface = limelightInterface;
 
-        angleController = new PIDController(0.18, 0, 0);
+        driveController = new PIDController(0.01, 0, 0);
 
-        angleController.enableContinuousInput(-Math.PI, Math.PI);
-        angleController.setTolerance(Units.degreesToRadians(0.2));
+        driveController.setTolerance(0.3);
 
         addRequirements(drive);
     }
 
     @Override
     public void initialize() {
-        angleController.reset();
-        angleController.setSetpoint(0);
+        driveController.reset();
+        driveController.setSetpoint(targetLimelightTY);
     }
 
     @Override
     public void execute() {
-        double output = angleController.calculate(Units.degreesToRadians(limelightInterface.getTX()));
+        double output = driveController.calculate(limelightInterface.getTY());
         output = Math.copySign(minSpeed, output) + output;
 
-        drive.drivePercent(-output, output);
+        drive.drivePercent(output, output);
     }
 
     @Override
     public boolean isFinished() {
-        return angleController.atSetpoint();
+        return driveController.atSetpoint();
     }
 
     @Override

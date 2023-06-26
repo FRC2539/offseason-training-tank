@@ -5,14 +5,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Drive;
-import frc.robot.LimelightInterface;
 import frc.robot.commands.AimToTargetCommand;
+import frc.robot.commands.DriveToTargetCommand;
 
 public class RobotContainer {
 	Joystick leftJoystick = new Joystick(0);
 	Joystick rightJoystick = new Joystick(1);
 
     JoystickButton leftTrigger = new JoystickButton(leftJoystick, 1);
+    JoystickButton rightTrigger = new JoystickButton(rightJoystick, 1);
 
     private Drive drive;
     private LimelightInterface limelightInterface;
@@ -28,7 +29,9 @@ public class RobotContainer {
         drive.setDefaultCommand(
                 drive.driveCommand(this::getLeftAxis, this::getRightAxis));
         
-        leftTrigger.whileTrue(new AimToTargetCommand(drive, limelightInterface));
+        leftTrigger.onTrue(new AimToTargetCommand(drive, limelightInterface));
+
+        rightTrigger.onTrue(new DriveToTargetCommand(0, drive, limelightInterface));
     }
 
 	private double getLeftAxis() {
