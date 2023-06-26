@@ -18,6 +18,8 @@ public class TurnToAngleCommand extends CommandBase {
 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
         angleController.setTolerance(Units.degreesToRadians(0.1));
+
+        addRequirements(drive);
     }
 
     @Override

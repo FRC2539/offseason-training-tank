@@ -20,6 +20,8 @@ public class DriveForwardCommand extends CommandBase {
 
         leftController.setTolerance(0.03);
         rightController.setTolerance(0.03);
+
+        addRequirements(drive);
     }
 
     @Override
