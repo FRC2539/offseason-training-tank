@@ -35,10 +35,10 @@ public class Drive extends SubsystemBase {
         leftLeaderMotor.setSmartCurrentLimit(30);
         rightLeaderMotor.setSmartCurrentLimit(30);
 
-        leftFollowerMotor.setIdleMode(IdleMode.kBrake);
-        rightFollowerMotor.setIdleMode(IdleMode.kBrake);
-        leftLeaderMotor.setIdleMode(IdleMode.kBrake);
-        rightLeaderMotor.setIdleMode(IdleMode.kBrake);
+        leftFollowerMotor.setIdleMode(IdleMode.kCoast);
+        rightFollowerMotor.setIdleMode(IdleMode.kCoast);
+        leftLeaderMotor.setIdleMode(IdleMode.kCoast);
+        rightLeaderMotor.setIdleMode(IdleMode.kCoast);
 
         leftLeaderMotor.burnFlash();
         rightLeaderMotor.burnFlash();
@@ -48,7 +48,7 @@ public class Drive extends SubsystemBase {
 
     public Command driveCommand(DoubleSupplier leftAxis, DoubleSupplier rightAxis) {
         return run(() -> {
-            driveCurvature(leftAxis.getAsDouble(), rightAxis.getAsDouble());
+            driveArcade(leftAxis.getAsDouble(), rightAxis.getAsDouble());
         });
     }
 
@@ -58,7 +58,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void driveArcade(double xSpeed, double zRotation) {
-        var speeds = DifferentialDrive.arcadeDriveIK(xSpeed, zRotation, false);
+        var speeds = DifferentialDrive.arcadeDriveIK(xSpeed, zRotation, true);
 
         drivePercent(speeds.left, speeds.right);
     }
